@@ -5,6 +5,7 @@ import { throttle } from 'lodash';
 import authReducer from './authReducer';
 import pageReducer from './pageReducer';
 import { loadState, saveState } from '../util/stateFromStorage';
+import errorReducer from './errorReducer';
 
 const twoSec = 2000;
 
@@ -13,6 +14,7 @@ const persistedState = loadState();
 const rootStore = combineReducers({
   auth: authReducer,
   page: pageReducer,
+  errorR: errorReducer,
 });
 
 const store = createStore(rootStore, persistedState, composeWithDevTools(applyMiddleware(thunk)));

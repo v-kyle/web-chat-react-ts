@@ -6,6 +6,8 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import { useDispatch } from 'react-redux';
 import { RegParams } from '../api/auth';
 import reg from '../store/asyncActions/reg';
+import { clearErrorAction } from '../store/errorReducer';
+import ErrorCard from '../components/ErrorCard';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,6 +52,11 @@ const Registration: React.FC = () => {
     };
 
     dispatch(reg(regParams));
+    dispatch(clearErrorAction());
+  }
+
+  function submitIsDisable() {
+    return login.length < 1 || password.length < 6 || photo.length < 1 || name.length < 1;
   }
 
   return (
@@ -82,6 +89,8 @@ const Registration: React.FC = () => {
             onChange={(files) => {
               if (files && files[0]) {
                 savePhoto(files[0]);
+              } else {
+                setPhoto('');
               }
             }}
           />
@@ -94,8 +103,9 @@ const Registration: React.FC = () => {
             placeholder="Password"
             onChange={(event) => setPassword(event.target.value)}
           />
-          <Button fullWidth type="submit" color="primary">Register</Button>
+          <Button disabled={submitIsDisable()} fullWidth type="submit" color="primary">Register</Button>
         </form>
+        <ErrorCard />
       </div>
     </Container>
   );

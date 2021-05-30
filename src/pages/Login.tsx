@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import loginAsyncAction from '../store/asyncActions/login';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
+import { clearErrorAction } from '../store/errorReducer';
+import ErrorCard from '../components/ErrorCard';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,6 +41,11 @@ const Login: React.FC = () => {
   function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     dispatch(loginAsyncAction(login, password));
+    dispatch(clearErrorAction());
+  }
+
+  function submitIsDisable() {
+    return login.length < 1 || password.length < 6;
   }
 
   return (
@@ -64,8 +71,9 @@ const Login: React.FC = () => {
             placeholder="Password"
             onChange={(event) => setPassword(event.target.value)}
           />
-          <Button fullWidth type="submit" color="primary">Login</Button>
+          <Button fullWidth disabled={submitIsDisable()} type="submit" color="primary">Login</Button>
         </form>
+        <ErrorCard />
       </div>
     </Container>
   );

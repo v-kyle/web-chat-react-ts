@@ -24,22 +24,6 @@ const PageContainer: React.FC = () => {
       {currentPage === CurrentPage.MAIN && <ChatPage />}
     </>
   );
-
-  /* <ProvideAuth>
-    <Router>
-      <Switch>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/registration">
-          <Registration />
-        </Route>
-        <PrivateRoute path="/main">
-          <ChatPage />
-        </PrivateRoute>
-      </Switch>
-    </Router>
-  </ProvideAuth> */
 };
 
 export default PageContainer;

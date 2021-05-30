@@ -6,6 +6,7 @@ import { CurrentPage, pageAction } from '../store/pageReducer';
 const ChatPage: React.FC = () => {
   const dispatch = useDispatch();
   const token = useTypedSelector((state) => state.auth.token);
+  const photo = useTypedSelector((state) => state.auth.user?.photo);
 
   useEffect(() => {
     if (!token) {
@@ -15,6 +16,7 @@ const ChatPage: React.FC = () => {
 
   return (
     <div>
+      <img src={photo} alt="" style={{ maxWidth: '400px' }} />
       It is chat with your friend
     </div>
   );
