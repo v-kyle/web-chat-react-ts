@@ -1,16 +1,21 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Toolbar } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import { logoutAction } from '../store/authReducer';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
 
-const styles = {
-  width: '100%',
-  background: 'yellow',
-};
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    width: '100%',
+    background: 'yellow',
+  },
+}));
 
 const Header: React.FC = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const currentPage = useTypedSelector((state) => state.page.page);
 
@@ -26,35 +31,36 @@ const Header: React.FC = () => {
   }
 
   return (
-    <div style={styles}>
-      Header
-      {currentPage === CurrentPage.MAIN ? (
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={handleLogout}
-        >
-          Logout
-        </Button>
-      ) : ''}
-      {currentPage === CurrentPage.LOGIN ? (
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={setRegPage}
-        >
-          Registration
-        </Button>
-      ) : '' }
-      {currentPage === CurrentPage.REG ? (
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={setLoginPage}
-        >
-          Login
-        </Button>
-      ) : '' }
+    <div className={classes.appBar}>
+      <Toolbar>
+        {currentPage === CurrentPage.MAIN ? (
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        ) : ''}
+        {currentPage === CurrentPage.LOGIN ? (
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={setRegPage}
+          >
+            Registration
+          </Button>
+        ) : ''}
+        {currentPage === CurrentPage.REG ? (
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={setLoginPage}
+          >
+            Login
+          </Button>
+        ) : ''}
+      </Toolbar>
     </div>
   );
 };
