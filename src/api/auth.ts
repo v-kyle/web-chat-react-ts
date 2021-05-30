@@ -12,15 +12,15 @@ async function auth(login: string, password: string): Promise<AuthResponse> {
   return res.data;
 }
 
-interface RegParam {
+export interface RegParams {
   login: string;
   name: string;
   photo: string;
   password: string;
 }
 
-async function registration(param: RegParam): Promise<AuthResponse> {
-  const res = await http.post<AuthResponse>('/registration', param);
+async function registration(param: RegParams): Promise<AuthResponse> {
+  const res = await http.post<AuthResponse>('/reg', param);
 
   return res.data;
 }

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Container, TextField, Button, CssBaseline, makeStyles,
+  Button, Container, CssBaseline, makeStyles, TextField,
 } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import loginAsyncAction from '../store/asyncActions/login';
+import useTypedSelector from '../hooks/useTypedSelector';
+import { CurrentPage, pageAction } from '../store/pageReducer';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -18,14 +22,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
 
+  const token = useTypedSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(pageAction(CurrentPage.MAIN));
+    }
+  }, [token]);
+
   const [login, setLogin] = useState('');
-  const [pass, setPass] = useState('');
+  const [password, setPassword] = useState('');
 
   function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
-    console.log(login, pass);
+    dispatch(loginAsyncAction(login, password));
   }
 
   return (
@@ -44,12 +57,12 @@ const Login: React.FC = () => {
           />
           <TextField
             fullWidth
-            value={pass}
+            value={password}
             type="password"
             margin="normal"
             variant="outlined"
             placeholder="Password"
-            onChange={(event) => setPass(event.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <Button fullWidth type="submit" color="primary">Login</Button>
         </form>
