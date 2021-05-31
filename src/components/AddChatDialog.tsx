@@ -19,6 +19,7 @@ const AddChatDialog: React.FC<{ handleCloseDialog: () => void }> = ({ handleClos
   }
 
   const handleClose = () => {
+    handleCloseDialog();
     setOpen(false);
   };
 
@@ -43,7 +44,7 @@ const AddChatDialog: React.FC<{ handleCloseDialog: () => void }> = ({ handleClos
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleCreateChat} color="primary">
+        <Button onClick={handleCreateChat} color="primary" disabled={chatName.length === 0}>
           Join chat
         </Button>
       </DialogActions>
