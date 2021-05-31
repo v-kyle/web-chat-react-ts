@@ -54,6 +54,7 @@ const Login: React.FC = () => {
       <div className={classes.paper}>
         <form onSubmit={handleSubmit} className={classes.form}>
           <TextField
+            label="Login"
             fullWidth
             value={login}
             margin="normal"
@@ -63,6 +64,7 @@ const Login: React.FC = () => {
             onChange={(event) => setLogin(event.target.value)}
           />
           <TextField
+            label="Password"
             fullWidth
             value={password}
             type="password"

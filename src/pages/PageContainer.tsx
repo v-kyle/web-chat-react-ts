@@ -4,7 +4,7 @@ import Login from './Login';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
 import Registration from './Registration';
-import ChatPage from './ChatPage';
+import MainPage from './MainPage';
 
 const PageContainer: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const PageContainer: React.FC = () => {
     <>
       {currentPage === CurrentPage.LOGIN && <Login />}
       {currentPage === CurrentPage.REG && <Registration />}
-      {currentPage === CurrentPage.MAIN && <ChatPage />}
+      {currentPage === CurrentPage.MAIN && <MainPage />}
     </>
   );
 };

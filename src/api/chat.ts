@@ -9,7 +9,7 @@ interface ChatResponse {
 
 async function createChat(chatName: string): Promise<ChatResponse> {
   const { token } = store.getState().auth;
-  const res = await http.post<Promise<ChatResponse>>('/chat/start', {
+  const res = await http.post<ChatResponse>('/chat/start', {
     chatName,
   }, {
     headers: {
@@ -21,7 +21,7 @@ async function createChat(chatName: string): Promise<ChatResponse> {
 
 async function getChat(chatName: string): Promise<ChatResponse> {
   const { token } = store.getState().auth;
-  const res = await http.post<Promise<ChatResponse>>('/chat', {
+  const res = await http.post<ChatResponse>('/chat', {
     chatName,
   }, {
     headers: {
@@ -31,11 +31,13 @@ async function getChat(chatName: string): Promise<ChatResponse> {
   return res.data;
 }
 
-type ChatsResponse = Array<string>;
+interface ChatsResponse {
+  chats: Array<string>
+}
 
 async function getAllChats(): Promise<ChatsResponse> {
   const { token } = store.getState().auth;
-  const res = await http.get<Promise<ChatsResponse>>('/chats', {
+  const res = await http.get<ChatsResponse>('/chats', {
     headers: {
       token,
     },
