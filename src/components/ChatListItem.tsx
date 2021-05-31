@@ -6,7 +6,8 @@ const ChatListItem: React.FC<{chatName: string}> = ({ chatName }) => (
     variant="text"
     style={
     {
-      width: '75%',
+      display: 'block',
+      width: '500px',
       border: '1px solid rgba(50, 50, 255, .5)',
       margin: '5px 15px 5px 5px',
       fontSize: '1.25rem',

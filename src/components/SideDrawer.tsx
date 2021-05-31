@@ -30,9 +30,16 @@ const SideDrawer: React.FC = () => {
   }
 
   return (
-    <Drawer variant="permanent" className={classes.drawer} style={{ width: matches ? '56px' : '240px' }}>
+    <Drawer
+      variant="permanent"
+      className={classes.drawer}
+      style={{ width: matches ? '56px' : '240px' }}
+    >
       <Toolbar />
-      <div className={classes.drawerListContainer} style={{ width: matches ? '56px' : '200px' }}>
+      <div
+        className={classes.drawerListContainer}
+        style={{ width: matches ? '56px' : '200px', flexGrow: 1 }}
+      >
         <List>
           <ListItem button onClick={handleAddChat}>
             <ListItemIcon>

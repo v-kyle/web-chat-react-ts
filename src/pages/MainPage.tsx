@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 import SideDrawer from '../components/SideDrawer';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
@@ -13,7 +14,8 @@ const useStyles = makeStyles(() => ({
   },
   chatContainer: {
     flexGrow: 1,
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: '1fr 2fr',
   },
 }));
 
@@ -54,7 +56,7 @@ const MainPage: React.FC = () => {
         <div style={{ flexGrow: 1, borderRight: '1px solid navy' }}>
           <Chats chats={chats} />
         </div>
-        <div style={{ flexGrow: 2 }}>Dialog there</div>
+        <div style={{ flexGrow: 2, background: blue[50] }}>Dialog there</div>
       </main>
     </div>
   );
