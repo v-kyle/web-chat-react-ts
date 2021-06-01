@@ -45,4 +45,18 @@ async function getAllChats(): Promise<ChatsResponse> {
   return res.data;
 }
 
-export { createChat, getChat, getAllChats };
+async function sendMessage(chatName: string, messageText: string) {
+  const { token } = store.getState().auth;
+  await http.post('/chat/send', {
+    chatName,
+    text: messageText,
+  }, {
+    headers: {
+      token,
+    },
+  });
+}
+
+export {
+  createChat, getChat, getAllChats, sendMessage,
+};

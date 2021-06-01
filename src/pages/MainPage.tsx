@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
 import SideDrawer from '../components/SideDrawer';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
-import { getAllChats } from '../api/chat';
+import { getAllChats, getChat } from '../api/chat';
 import Chats from '../components/Chats';
+import { Chat } from '../models/Chat';
+import SelectedChat from '../components/SelectedChat';
 
 const useStyles = makeStyles(() => ({
   mainPageContainer: {
@@ -24,6 +25,8 @@ const MainPage: React.FC = () => {
   const dispatch = useDispatch();
   const token = useTypedSelector((state) => state.auth.token);
   const [chats, setChats] = useState([] as Array<string>);
+  const [selectedChatName, setSelectedChatName] = useState('');
+  const [selectedChat, setSelectedChat] = useState(null as Chat | null);
   // const photo = useTypedSelector((state) => state.auth.user?.photo);
 
   useEffect(() => {
@@ -47,16 +50,33 @@ const MainPage: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    async function getSelectedChat() {
+      if (selectedChatName) {
+        const res = await getChat(selectedChatName);
+        console.log(res);
+        setSelectedChat(res.chat);
+      }
+    }
+
+    const intervalId = setInterval(async () => {
+      await getSelectedChat();
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [selectedChatName]);
+
   return (
     <div className={classes.mainPageContainer}>
       <SideDrawer />
       <main className={classes.chatContainer}>
-        {/* It is chat with your friend
-        <img src={photo} alt="" style={{ maxWidth: '400px' }} /> */}
+        {/* <img src={photo} alt="" style={{ maxWidth: '400px' }} /> */}
         <div style={{ flexGrow: 1, borderRight: '1px solid navy' }}>
-          <Chats chats={chats} />
+          <Chats chats={chats} handleChatNameSelect={setSelectedChatName} />
         </div>
-        <div style={{ flexGrow: 2, background: blue[50] }}>Dialog there</div>
+        <SelectedChat chat={selectedChat} />
       </main>
     </div>
   );

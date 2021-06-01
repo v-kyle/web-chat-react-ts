@@ -1,9 +1,12 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 
-const ChatListItem: React.FC<{chatName: string}> = ({ chatName }) => (
+const ChatListItem: React.FC<{chatName: string, onChatNameSelect: (chatName: string) => void}> = (
+  { chatName, onChatNameSelect },
+) => (
   <Button
     variant="text"
+    onClick={() => onChatNameSelect(chatName)}
     style={
     {
       display: 'block',
