@@ -8,6 +8,7 @@ import { getAllChats, getChat } from '../api/chat';
 import Chats from '../components/Chats';
 import { Chat } from '../models/Chat';
 import SelectedChat from '../components/SelectedChat';
+import config from '../config';
 
 const useStyles = makeStyles(() => ({
   mainPageContainer: {
@@ -43,7 +44,7 @@ const MainPage: React.FC = () => {
 
     const intervalId = setInterval(async () => {
       await getChats();
-    }, 2000);
+    }, config.chatsUpdateRate);
 
     return () => {
       clearInterval(intervalId);
@@ -54,14 +55,13 @@ const MainPage: React.FC = () => {
     async function getSelectedChat() {
       if (selectedChatName) {
         const res = await getChat(selectedChatName);
-        console.log(res);
         setSelectedChat(res.chat);
       }
     }
 
     const intervalId = setInterval(async () => {
       await getSelectedChat();
-    }, 1000);
+    }, config.selectedChatUpdateRate);
 
     return () => {
       clearInterval(intervalId);

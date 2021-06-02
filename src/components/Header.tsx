@@ -19,6 +19,7 @@ const Header: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const currentPage = useTypedSelector((state) => state.page.page);
+  const userName = useTypedSelector((state) => state.auth.user?.name);
 
   function handleLogout() {
     dispatch(logoutAction());
@@ -34,7 +35,11 @@ const Header: React.FC = () => {
   return (
     <div className={classes.appBar}>
       <Toolbar>
-        <div style={{ marginLeft: 'auto', width: '150px' }}>
+        <div style={{
+          marginLeft: 'auto', width: '150px', display: 'flex', alignItems: 'center',
+        }}
+        >
+          {userName && <div style={{ color: 'white', fontSize: '1.15rem', marginRight: '25px' }}>{userName}</div>}
           {currentPage === CurrentPage.MAIN ? (
             <Button
               color="primary"
