@@ -1,8 +1,7 @@
-import { uuid } from './uuid';
 import { Chat } from './Chat';
 
 export interface User {
-  id: uuid;
+  id: number;
   name: string;
   login: string;
   photo: string;

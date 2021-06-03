@@ -12,6 +12,7 @@ import config from '../config';
 const useStyles = makeStyles(() => ({
   mainPageContainer: {
     display: 'flex',
+    padding: 0,
   },
   chatContainer: {
     flexGrow: 1,

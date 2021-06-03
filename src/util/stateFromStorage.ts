@@ -14,7 +14,7 @@ export const loadState = (): RootState | undefined => {
   }
 };
 
-export const saveState = (state: RootState): void => {
+export const saveState = (state: Pick<RootState, 'auth' | 'page' | 'currentChat'>): void => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem(localStorageKey, serializedState);

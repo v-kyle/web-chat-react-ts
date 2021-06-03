@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, useMediaQuery, IconButton } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { red } from '@material-ui/core/colors';
@@ -11,20 +11,11 @@ const ChatListItem: React.FC<{chatName: string, onChatsEdited: (chats: Array<str
   { chatName, onChatsEdited },
 ) => {
   const dispatch = useDispatch();
-  const matchesNotXL = useMediaQuery('(max-width: 1000px)');
-  const matchesMobile = useMediaQuery('(max-width: 500px)');
   const selectedChatName = useTypedSelector((state) => state.currentChat);
-  let width = '500px';
+  const width = '90%';
 
   function isSelectedChat() {
     return chatName === selectedChatName;
-  }
-
-  if (matchesNotXL) {
-    width = '300px';
-    if (matchesMobile) {
-      width = '150px';
-    }
   }
 
   function setCurrentChat() {
@@ -43,9 +34,10 @@ const ChatListItem: React.FC<{chatName: string, onChatsEdited: (chats: Array<str
     <div
       style={
         {
+          boxSizing: 'border-box',
           width,
           border: '1px solid rgba(50, 50, 255, .5)',
-          margin: '5px 15px 5px 5px',
+          margin: '10px 0',
           display: 'flex',
         }
       }

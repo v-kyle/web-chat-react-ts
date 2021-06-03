@@ -38,7 +38,7 @@ const Header: React.FC = () => {
     <div className={classes.appBar}>
       <Toolbar>
         <div style={{
-          marginLeft: 'auto', width: '150px', display: 'flex', alignItems: 'center',
+          display: 'flex', alignItems: 'center',
         }}
         >
           {userName && <div style={{ color: 'white', fontSize: '1.15rem', marginRight: '25px' }}>{userName}</div>}

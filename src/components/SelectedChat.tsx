@@ -7,6 +7,7 @@ import { Chat } from '../models/Chat';
 import { getChat, sendMessage } from '../api/chat';
 import config from '../config';
 import useTypedSelector from '../hooks/useTypedSelector';
+import MessageItem from './MessageItem';
 
 const useStyles = makeStyles(() => ({
   noChat: {
@@ -89,34 +90,22 @@ const SelectedChat: React.FC = () => {
   }, [chat?.message.length]);
 
   return (
-    <div style={{ flexGrow: 2, background: blue[50] }}>
+    <div style={{ flexGrow: 2, background: blue[50], borderLeft: '1px solid navy' }}>
       {!chat && <div className={classes.noChat}>Create or select chat</div>}
       {chat && (
       <div className={classes.chatContainer}>
         <header className={classes.chatHeader}>{chat.name}</header>
         <main
-          style={{ overflow: 'auto' }}
+          style={{ overflow: 'auto', paddingLeft: '25px', paddingRight: '25px' }}
           ref={(instance) => {
             if (instance) {
               bottomMessage.current = instance;
             }
           }}
         >
-          {haveMessages() ? (chat.message.map((message) => (
-            <div key={message.id} style={{ border: '1px solid grey', marginBottom: '25px' }}>
-              Author:
-              <br />
-              {message.author.name}
-              <br />
-              Text:
-              <br />
-              {message.text}
-              <br />
-              Time:
-              <br />
-              {message.time}
-            </div>
-          ))) : <div>No messages. Write first!</div> }
+          {haveMessages() ? (chat.message.map(
+            (message) => <MessageItem message={message} key={message.id} />,
+          )) : <div>No messages. Write first!</div> }
         </main>
         <footer className={classes.chatActions}>
           <TextField
