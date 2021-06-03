@@ -6,6 +6,7 @@ import { blue } from '@material-ui/core/colors';
 import { logoutAction } from '../store/authReducer';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
+import { setChatAction } from '../store/currentChatReducer';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -23,6 +24,7 @@ const Header: React.FC = () => {
 
   function handleLogout() {
     dispatch(logoutAction());
+    dispatch(setChatAction(''));
   }
 
   function setRegPage() {

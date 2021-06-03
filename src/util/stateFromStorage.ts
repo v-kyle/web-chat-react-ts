@@ -1,8 +1,10 @@
 import { RootState } from '../store';
 
+const localStorageKey = 'web-chat-state';
+
 export const loadState = (): RootState | undefined => {
   try {
-    const serializedState = localStorage.getItem('state');
+    const serializedState = localStorage.getItem(localStorageKey);
     if (serializedState === null) {
       return undefined;
     }
@@ -15,7 +17,7 @@ export const loadState = (): RootState | undefined => {
 export const saveState = (state: RootState): void => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('state', serializedState);
+    localStorage.setItem(localStorageKey, serializedState);
   } catch {
     console.log('Save state error!');
   }

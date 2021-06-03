@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import { throttle } from 'lodash';
 import authReducer from './authReducer';
 import pageReducer from './pageReducer';
+import currentChatReducer from './currentChatReducer';
 import { loadState, saveState } from '../util/stateFromStorage';
 import errorReducer from './errorReducer';
 
@@ -15,6 +16,7 @@ const rootStore = combineReducers({
   auth: authReducer,
   page: pageReducer,
   errorR: errorReducer,
+  currentChat: currentChatReducer,
 });
 
 const store = createStore(rootStore, persistedState, composeWithDevTools(applyMiddleware(thunk)));

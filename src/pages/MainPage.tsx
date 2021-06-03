@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Container } from '@material-ui/core';
 import SideDrawer from '../components/SideDrawer';
 import useTypedSelector from '../hooks/useTypedSelector';
 import { CurrentPage, pageAction } from '../store/pageReducer';
@@ -24,11 +24,10 @@ const useStyles = makeStyles(() => ({
 const MainPage: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selectedChatName = useTypedSelector((state) => state.currentChat);
   const token = useTypedSelector((state) => state.auth.token);
   const [chats, setChats] = useState([] as Array<string>);
-  const [selectedChatName, setSelectedChatName] = useState('');
   const [selectedChat, setSelectedChat] = useState(null as Chat | null);
-  // const photo = useTypedSelector((state) => state.auth.user?.photo);
 
   useEffect(() => {
     if (!token) {
@@ -51,7 +50,7 @@ const MainPage: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function getSelectedChat() {
       if (selectedChatName) {
         const res = await getChat(selectedChatName);
@@ -69,16 +68,13 @@ const MainPage: React.FC = () => {
   }, [selectedChatName]);
 
   return (
-    <div className={classes.mainPageContainer}>
+    <Container maxWidth="xl" className={classes.mainPageContainer}>
       <SideDrawer />
       <main className={classes.chatContainer}>
-        {/* <img src={photo} alt="" style={{ maxWidth: '400px' }} /> */}
-        <div style={{ flexGrow: 1, borderRight: '1px solid navy' }}>
-          <Chats chats={chats} handleChatNameSelect={setSelectedChatName} />
-        </div>
+        <Chats chats={chats} />
         <SelectedChat chat={selectedChat} />
       </main>
-    </div>
+    </Container>
   );
 };
 
