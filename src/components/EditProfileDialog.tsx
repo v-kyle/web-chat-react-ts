@@ -90,7 +90,7 @@ const EditProfileDialog: React.FC<{onClose: () => void}> = ({ onClose }) => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleEditProfile} color="primary">
+          <Button onClick={handleEditProfile} disabled={name?.length === 0} color="primary">
             Edit
           </Button>
         </DialogActions>

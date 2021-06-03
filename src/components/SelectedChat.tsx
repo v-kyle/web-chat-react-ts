@@ -123,7 +123,7 @@ const SelectedChat: React.FC = () => {
             type="text"
             style={{ background: 'white' }}
             placeholder="Type here"
-            label="message"
+            label="Message"
             value={newMessage}
             onKeyDown={handleKeyDown}
             onChange={(e) => setNewMessage(e.target.value)}
