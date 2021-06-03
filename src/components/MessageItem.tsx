@@ -8,6 +8,7 @@ import { User } from '../models/User';
 import UserProfileModal from './UserProfileModal';
 import { closeBackdropAction, openBackdropAction } from '../store/backdropReducer';
 import EditMessageDialog from './EditMessageDialog';
+import useTypedSelector from '../hooks/useTypedSelector';
 
 const useStyles = makeStyles(() => ({
   messageItem: {
@@ -38,6 +39,9 @@ const useStyles = makeStyles(() => ({
 const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const authUser = useTypedSelector((state) => state.auth.user);
+
+  const isMyMessage = () => message.author.id === authUser?.id;
 
   const [user, setUser] = useState(null as User | null);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -64,9 +68,11 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
       <div className={classes.messageText}>{message.text}</div>
       <br />
       <div className={classes.messageTime}>{message.time}</div>
+      {isMyMessage() && (
       <IconButton size="small" onClick={() => setShowEditDialog(true)}>
         <EditIcon />
       </IconButton>
+      )}
       {user && <UserProfileModal user={user} handleCloseDialog={handleCloseDialog} />}
       {showEditDialog && (
       <EditMessageDialog
