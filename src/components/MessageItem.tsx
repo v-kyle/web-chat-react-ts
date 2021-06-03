@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { IconButton, makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
+import EditIcon from '@material-ui/icons/Edit';
 import { Message } from '../models/Message';
 import { getProfile } from '../api/user';
 import { User } from '../models/User';
 import UserProfileModal from './UserProfileModal';
 import { closeBackdropAction, openBackdropAction } from '../store/backdropReducer';
+import EditMessageDialog from './EditMessageDialog';
 
 const useStyles = makeStyles(() => ({
   messageItem: {
@@ -25,6 +27,12 @@ const useStyles = makeStyles(() => ({
   messageText: {
     fontSize: '1.15rem',
   },
+  messageTime: {
+    fontSize: '.8rem',
+    background: 'transparent',
+    border: 'none',
+    fontStyle: 'italic',
+  },
 }));
 
 const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
@@ -32,6 +40,7 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
   const dispatch = useDispatch();
 
   const [user, setUser] = useState(null as User | null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   async function handleShowProfile() {
     dispatch(openBackdropAction());
@@ -54,8 +63,17 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
       <br />
       <div className={classes.messageText}>{message.text}</div>
       <br />
-      <div className={classes.messageAuthor}>{message.time}</div>
+      <div className={classes.messageTime}>{message.time}</div>
+      <IconButton size="small" onClick={() => setShowEditDialog(true)}>
+        <EditIcon />
+      </IconButton>
       {user && <UserProfileModal user={user} handleCloseDialog={handleCloseDialog} />}
+      {showEditDialog && (
+      <EditMessageDialog
+        onCloseDialog={() => setShowEditDialog(false)}
+        message={message}
+      />
+      )}
     </div>
   );
 };

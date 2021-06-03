@@ -2,6 +2,7 @@ import http from './http';
 import { Chat } from '../models/Chat';
 
 import store from '../store';
+import { Message } from '../models/Message';
 
 interface ChatResponse {
   chat: Chat
@@ -45,9 +46,9 @@ async function getAllChats(): Promise<ChatsResponse> {
   return res.data;
 }
 
-async function sendMessage(chatName: string, messageText: string): Promise<void> {
+async function sendMessage(chatName: string, messageText: string): Promise<Message> {
   const { token } = store.getState().auth;
-  await http.post('/chat/send', { // TODO: принимать ответ
+  const res = await http.post<Message>('/chat/send', { // TODO: принимать ответ
     chatName,
     text: messageText,
   }, {
@@ -55,6 +56,8 @@ async function sendMessage(chatName: string, messageText: string): Promise<void>
       token,
     },
   });
+
+  return res.data;
 }
 
 async function leaveChat(chatName: string): Promise<ChatsResponse> {
@@ -70,6 +73,23 @@ async function leaveChat(chatName: string): Promise<ChatsResponse> {
   return res.data;
 }
 
+async function editMessage(
+  chatName: string, messageId: number, text: string,
+): Promise<ChatResponse> {
+  const { token } = store.getState().auth;
+  const res = await http.post<ChatResponse>('/chat/edit', {
+    chatName,
+    messageId,
+    text,
+  }, {
+    headers: {
+      token,
+    },
+  });
+
+  return res.data;
+}
+
 export {
-  createChat, getChat, getAllChats, sendMessage, leaveChat,
+  createChat, getChat, getAllChats, sendMessage, leaveChat, editMessage,
 };
