@@ -14,7 +14,8 @@ const defaultAuthState: IAuthState = {
 
 enum AuthActionsTypes {
   LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT'
+  LOGOUT = 'LOGOUT',
+  SET_USER = 'SET_USER',
 }
 
 interface LoginAction {
@@ -28,7 +29,14 @@ interface LogoutAction {
   type: AuthActionsTypes.LOGOUT;
 }
 
-const authReducer = (state = defaultAuthState, action: LoginAction | LogoutAction): IAuthState => {
+interface SetUserAction {
+  type: AuthActionsTypes.SET_USER
+  payload: User,
+}
+
+const authReducer = (
+  state = defaultAuthState, action: LoginAction | LogoutAction | SetUserAction,
+): IAuthState => {
   switch (action.type) {
     case AuthActionsTypes.LOGIN:
       return {
@@ -47,6 +55,19 @@ const authReducer = (state = defaultAuthState, action: LoginAction | LogoutActio
       };
     case AuthActionsTypes.LOGOUT:
       return { ...state, ...{ token: null, user: null, isLogged: false } };
+    case AuthActionsTypes.SET_USER:
+      return {
+        ...state,
+        ...{
+          user: {
+            login: action.payload.login,
+            photo: action.payload.photo,
+            name: action.payload.name,
+            chats: action.payload.chats || [],
+            id: action.payload.id,
+          },
+        },
+      };
     default:
       return state;
   }
@@ -54,5 +75,8 @@ const authReducer = (state = defaultAuthState, action: LoginAction | LogoutActio
 
 export const loginAction = (payload: LoginAction['payload']): LoginAction => ({ type: AuthActionsTypes.LOGIN, payload });
 export const logoutAction = (): LogoutAction => ({ type: AuthActionsTypes.LOGOUT });
+export const setUserAction = (
+  payload: User,
+): SetUserAction => ({ type: AuthActionsTypes.SET_USER, payload });
 
 export default authReducer;

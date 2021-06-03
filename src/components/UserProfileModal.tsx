@@ -6,12 +6,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { User } from '../models/User';
 import EditProfileDialog from './EditProfileDialog';
+import useTypedSelector from '../hooks/useTypedSelector';
 
 const UserProfileModal: React.FC<{user: User | null, handleCloseDialog: () => void}> = (
   { user, handleCloseDialog },
 ) => {
   const [open, setOpen] = useState(true);
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const authedUserId = useTypedSelector((state) => state.auth.user && state.auth.user.id);
 
   const handleClose = () => {
     handleCloseDialog();
@@ -34,23 +36,27 @@ const UserProfileModal: React.FC<{user: User | null, handleCloseDialog: () => vo
         <>
           <DialogTitle id="form-dialog-title">Profile info</DialogTitle>
           <DialogContent>
-            Login:
+            <span style={{ marginRight: '1rem', fontWeight: 'bold' }}>Login:</span>
             {user.login}
             <br />
-            Name:
+            <span style={{ marginRight: '1rem', fontWeight: 'bold' }}>Name:</span>
             {user.name}
             <br />
-            Photo:
             <br />
-            <img src={user.photo} alt="" style={{ width: '50%' }} />
+            <span style={{ marginRight: '1rem', fontWeight: 'bold' }}>Your photo:</span>
+            <br />
+            <br />
+            <img src={user.photo} alt="" style={{ maxWidth: '400px', border: '1px solid grey' }} />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
+            {(authedUserId === user.id) && (
             <Button onClick={handleEditProfile} color="primary">
               Edit
             </Button>
+            )}
           </DialogActions>
         </>
         )}
