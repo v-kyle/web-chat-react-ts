@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SideDrawer: React.FC = () => {
+const SideDrawer: React.FC<{onChatAdd: (chatName: string) => void}> = ({ onChatAdd }) => {
   const matches = useMediaQuery('(max-width: 500px)');
   const classes = useStyles();
   const user = useTypedSelector((state) => state.auth.user);
@@ -67,7 +67,7 @@ const SideDrawer: React.FC = () => {
           </ListItem>
         </List>
       </div>
-      {showDialog ? <AddChatDialog handleCloseDialog={handleCloseDialog} /> : ''}
+      {showDialog ? <AddChatDialog handleCloseDialog={handleCloseDialog} onChatAdd={onChatAdd} /> : ''}
       {showProfile ? <UserProfileModal handleCloseDialog={handleCloseUserProfile} user={user} /> : ''}
     </Drawer>
   );

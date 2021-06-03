@@ -33,6 +33,10 @@ const MainPage: React.FC = () => {
     }
   }, [token]);
 
+  function handleAddChat(chatName: string) {
+    setChats((prevChats) => [...prevChats, chatName]);
+  }
+
   useEffect(() => {
     async function getChats() {
       const res = await getAllChats();
@@ -50,7 +54,7 @@ const MainPage: React.FC = () => {
 
   return (
     <Container maxWidth="xl" className={classes.mainPageContainer}>
-      <SideDrawer />
+      <SideDrawer onChatAdd={handleAddChat} />
       <main className={classes.chatContainer}>
         <Chats chats={chats} onChatsEdited={setChats} />
         <SelectedChat />

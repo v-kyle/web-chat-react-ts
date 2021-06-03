@@ -47,7 +47,7 @@ async function getAllChats(): Promise<ChatsResponse> {
 
 async function sendMessage(chatName: string, messageText: string): Promise<void> {
   const { token } = store.getState().auth;
-  await http.post('/chat/send', {
+  await http.post('/chat/send', { // TODO: принимать ответ
     chatName,
     text: messageText,
   }, {

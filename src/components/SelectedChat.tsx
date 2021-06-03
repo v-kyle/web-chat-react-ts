@@ -1,7 +1,9 @@
 import React, {
   useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
-import { Button, makeStyles, TextField } from '@material-ui/core';
+import {
+  Button, makeStyles, TextField,
+} from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import { Chat } from '../models/Chat';
 import { getChat, sendMessage } from '../api/chat';
@@ -81,7 +83,14 @@ const SelectedChat: React.FC = () => {
   async function handleSendMessage() {
     if (chat) {
       await sendMessage(chat.name, newMessage);
+      // TODO: при возвращении сообщения, добавлять его в массив
       setNewMessage('');
+    }
+  }
+
+  async function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && newMessage.length > 0) {
+      await handleSendMessage();
     }
   }
 
@@ -116,6 +125,7 @@ const SelectedChat: React.FC = () => {
             placeholder="Type here"
             label="message"
             value={newMessage}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setNewMessage(e.target.value)}
           />
           <Button
@@ -123,6 +133,7 @@ const SelectedChat: React.FC = () => {
             style={{ background: blue[100], textTransform: 'none' }}
             variant="text"
             onClick={handleSendMessage}
+            disabled={newMessage.length === 0}
           >
             Send message
           </Button>
