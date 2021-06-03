@@ -57,6 +57,19 @@ async function sendMessage(chatName: string, messageText: string): Promise<void>
   });
 }
 
+async function leaveChat(chatName: string): Promise<ChatsResponse> {
+  const { token } = store.getState().auth;
+  const res = await http.post<ChatsResponse>('/chat/leave', {
+    chatName,
+  }, {
+    headers: {
+      token,
+    },
+  });
+
+  return res.data;
+}
+
 export {
-  createChat, getChat, getAllChats, sendMessage,
+  createChat, getChat, getAllChats, sendMessage, leaveChat,
 };

@@ -1,11 +1,14 @@
 import React from 'react';
-import { Button, useMediaQuery } from '@material-ui/core';
+import { Button, useMediaQuery, IconButton } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { red } from '@material-ui/core/colors';
 import { setChatAction } from '../store/currentChatReducer';
 import useTypedSelector from '../hooks/useTypedSelector';
+import { leaveChat } from '../api/chat';
 
-const ChatListItem: React.FC<{chatName: string}> = (
-  { chatName },
+const ChatListItem: React.FC<{chatName: string, onChatsEdited: (chats: Array<string>) => void}> = (
+  { chatName, onChatsEdited },
 ) => {
   const dispatch = useDispatch();
   const matchesNotXL = useMediaQuery('(max-width: 1000px)');
@@ -28,24 +31,43 @@ const ChatListItem: React.FC<{chatName: string}> = (
     dispatch(setChatAction(chatName));
   }
 
+  async function leave() {
+    const data = await leaveChat(chatName);
+    if (selectedChatName === chatName) {
+      dispatch(setChatAction(''));
+    }
+    onChatsEdited(data.chats);
+  }
+
   return (
-    <Button
-      variant="text"
-      onClick={setCurrentChat}
+    <div
       style={
         {
-          display: 'block',
-          fontWeight: isSelectedChat() ? 'bold' : 'normal',
           width,
           border: '1px solid rgba(50, 50, 255, .5)',
           margin: '5px 15px 5px 5px',
-          fontSize: isSelectedChat() ? '1.25rem' : '1rem',
-          textTransform: 'none',
+          display: 'flex',
         }
       }
     >
-      {chatName}
-    </Button>
+      <Button
+        variant="text"
+        onClick={setCurrentChat}
+        style={
+          {
+            flexGrow: 1,
+            fontWeight: isSelectedChat() ? 'bold' : 'normal',
+            fontSize: isSelectedChat() ? '1.25rem' : '1rem',
+            textTransform: 'none',
+          }
+        }
+      >
+        {chatName}
+      </Button>
+      <IconButton onClick={leave} aria-label="delete">
+        <DeleteIcon style={{ color: red[500] }} />
+      </IconButton>
+    </div>
   );
 };
 

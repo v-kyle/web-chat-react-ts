@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect, useLayoutEffect, useRef, useState,
+} from 'react';
 import { Button, makeStyles, TextField } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import { Chat } from '../models/Chat';
-import { sendMessage } from '../api/chat';
+import { getChat, sendMessage } from '../api/chat';
+import config from '../config';
+import useTypedSelector from '../hooks/useTypedSelector';
 
 const useStyles = makeStyles(() => ({
   noChat: {
@@ -34,10 +38,33 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SelectedChat: React.FC<{chat: Chat | null}> = ({ chat }) => {
+const SelectedChat: React.FC = () => {
   const classes = useStyles();
   const [newMessage, setNewMessage] = useState('');
   const bottomMessage = useRef<HTMLElement>();
+  const [chat, setChat] = useState(null as Chat | null);
+  const selectedChatName = useTypedSelector((state) => state.currentChat);
+
+  useLayoutEffect(() => {
+    async function getSelectedChat() {
+      if (selectedChatName) {
+        const res = await getChat(selectedChatName);
+        if (res.chat.name === selectedChatName) {
+          setChat(res.chat);
+        }
+      } else {
+        setChat(null);
+      }
+    }
+
+    const intervalId = setInterval(async () => {
+      await getSelectedChat();
+    }, config.selectedChatUpdateRate);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [selectedChatName]);
 
   function haveMessages() {
     return chat && chat.message.length;
