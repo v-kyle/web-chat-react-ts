@@ -3,9 +3,10 @@ import { Chat } from '../models/Chat';
 
 import store from '../store';
 import { Message } from '../models/Message';
+import { User } from '../models/User';
 
 interface ChatResponse {
-  chat: Chat
+  chat: Chat & {users: Array<User>}
 }
 
 async function createChat(chatName: string): Promise<ChatResponse> {

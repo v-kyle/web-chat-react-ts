@@ -10,6 +10,8 @@ import { getChat, sendMessage } from '../api/chat';
 import config from '../config';
 import useTypedSelector from '../hooks/useTypedSelector';
 import MessageItem from './MessageItem';
+import { User } from '../models/User';
+import UserListDialog from './UserListDialog';
 
 const useStyles = makeStyles(() => ({
   noChat: {
@@ -30,6 +32,15 @@ const useStyles = makeStyles(() => ({
     fontWeight: 'bold',
     fontSize: '1.25rem',
   },
+  numberOfUsers: {
+    fontSize: '.9rem',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    fontStyle: 'italic',
+    fontWeight: 'normal',
+    marginLeft: '10px',
+  },
   chatActions: {
     padding: '0 25px',
     display: 'grid',
@@ -45,8 +56,9 @@ const SelectedChat: React.FC = () => {
   const classes = useStyles();
   const [newMessage, setNewMessage] = useState('');
   const bottomMessage = useRef<HTMLElement>();
-  const [chat, setChat] = useState(null as Chat | null);
+  const [chat, setChat] = useState(null as Chat & {users: Array<User>} | null);
   const selectedChatName = useTypedSelector((state) => state.currentChat);
+  const [showUsers, setShowUsers] = useState(false);
 
   useLayoutEffect(() => {
     async function getSelectedChat() {
@@ -94,6 +106,10 @@ const SelectedChat: React.FC = () => {
     }
   }
 
+  const handleShowUsers = () => {
+    setShowUsers(true);
+  };
+
   useEffect(() => {
     scrollDown();
   }, [chat?.message.length]);
@@ -103,7 +119,14 @@ const SelectedChat: React.FC = () => {
       {!chat && <div className={classes.noChat}>Create or select chat</div>}
       {chat && (
       <div className={classes.chatContainer}>
-        <header className={classes.chatHeader}>{chat.name}</header>
+        <header className={classes.chatHeader}>
+          {chat.name}
+          <button type="button" className={classes.numberOfUsers} onClick={handleShowUsers}>
+            Number of users:
+            {' '}
+            {chat.users.length}
+          </button>
+        </header>
         <main
           style={{ overflow: 'auto', paddingLeft: '25px', paddingRight: '25px' }}
           ref={(instance) => {
@@ -140,6 +163,12 @@ const SelectedChat: React.FC = () => {
         </footer>
       </div>
       )}
+      {showUsers && (
+      <UserListDialog
+        onClose={() => setShowUsers(false)}
+        users={chat && chat.users}
+      />
+      ) }
     </div>
   );
 };
