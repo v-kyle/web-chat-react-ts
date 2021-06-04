@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Message } from '../models/Message';
 import { getProfile } from '../api/user';
 import { User } from '../models/User';
@@ -9,6 +10,7 @@ import UserProfileModal from './UserProfileModal';
 import { closeBackdropAction, openBackdropAction } from '../store/backdropReducer';
 import EditMessageDialog from './EditMessageDialog';
 import useTypedSelector from '../hooks/useTypedSelector';
+import { deleteMessage } from '../api/chat';
 
 const useStyles = makeStyles(() => ({
   messageItem: {
@@ -40,7 +42,7 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const authUser = useTypedSelector((state) => state.auth.user);
-
+  const chatName = useTypedSelector((state) => state.currentChat);
   const isMyMessage = () => message.author.id === authUser?.id;
 
   const [user, setUser] = useState(null as User | null);
@@ -55,6 +57,10 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
 
   function handleCloseDialog() {
     setUser(null);
+  }
+
+  async function handleDeleteMessage() {
+    await deleteMessage(chatName, message.id);
   }
 
   return (
@@ -72,6 +78,11 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => {
       <IconButton size="small" onClick={() => setShowEditDialog(true)}>
         <EditIcon />
       </IconButton>
+      )}
+      {isMyMessage() && (
+        <IconButton size="small" onClick={handleDeleteMessage}>
+          <DeleteIcon />
+        </IconButton>
       )}
       {user && <UserProfileModal user={user} handleCloseDialog={handleCloseDialog} />}
       {showEditDialog && (

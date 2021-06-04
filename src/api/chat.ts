@@ -91,6 +91,20 @@ async function editMessage(
   return res.data;
 }
 
+async function deleteMessage(
+  chatName: string, messageId: number,
+): Promise<void> {
+  const { token } = store.getState().auth;
+  await http.post<ChatResponse>('/chat/remove', {
+    chatName,
+    messageId,
+  }, {
+    headers: {
+      token,
+    },
+  });
+}
+
 export {
-  createChat, getChat, getAllChats, sendMessage, leaveChat, editMessage,
+  createChat, getChat, getAllChats, sendMessage, leaveChat, editMessage, deleteMessage,
 };

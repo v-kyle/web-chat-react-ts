@@ -95,7 +95,6 @@ const SelectedChat: React.FC = () => {
   async function handleSendMessage() {
     if (chat) {
       await sendMessage(chat.name, newMessage);
-      // TODO: при возвращении сообщения, добавлять его в массив
       setNewMessage('');
     }
   }
